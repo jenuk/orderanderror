@@ -54,6 +54,19 @@ void Image::setPixel(int x, int y, Pixel px) {
 }
 
 
+void Image::drawLineVertical(int x, int y0, int y1, Pixel color) {
+    for (int y=y0; y<=y1; ++y) {
+        (*this)(x, y) = color;
+    }
+}
+
+
+void Image::drawLineHorizontal(int x0, int x1, int y, Pixel color) {
+    for (int x=x0; x<=x1; ++x) {
+        (*this)(x, y) = color;
+    }
+}
+
 void Image::drawLineLow(int x0, int y0, int x1, int y1, Pixel color) {
     int dx = x1 - x0;
     int dy = y1 - y0;
@@ -123,5 +136,58 @@ void Image::drawLine(int x0, int y0, int x1, int y1, Pixel color) {
         else {
             this->drawLineHigh(x1, y1, x0, y0, color);
         } 
+    }
+}
+
+
+void Image::drawCircle(int x0, int y0, int r, Pixel color) {
+    int x = 0;
+    int y = r;
+    int d = 1 - r;
+
+    while (x <= y) {
+        (*this)(x0 + x, y0 + y) = color;
+        (*this)(x0 - x, y0 + y) = color;
+        
+        (*this)(x0 + x, y0 - y) = color;
+        (*this)(x0 - x, y0 - y) = color;
+
+        (*this)(x0 + y, y0 + x) = color;
+        (*this)(x0 - y, y0 + x) = color;
+        
+        (*this)(x0 + y, y0 - x) = color;
+        (*this)(x0 - y, y0 - x) = color;
+
+        if (d < 0) {
+            d += 2*x + 3;
+            ++x;
+        } else {
+            d += 2*x - 2*y + 5;
+            ++x;
+            --y;
+        }
+    }
+}
+
+
+void Image::drawCircleFilled(int x0, int y0, int r, Pixel color) {
+    int x = 0;
+    int y = r;
+    int d = 1 - r;
+
+    while (x <= y) {
+        this->drawLineHorizontal(x0 - x, x0 + x, y0 + y, color);
+        this->drawLineHorizontal(x0 - x, x0 + x, y0 - y, color);
+        this->drawLineHorizontal(x0 - y, x0 + y, y0 + x, color);
+        this->drawLineHorizontal(x0 - y, x0 + y, y0 - x, color);
+
+        if (d < 0) {
+            d += 2*x + 3;
+            ++x;
+        } else {
+            d += 2*x - 2*y + 5;
+            ++x;
+            --y;
+        }
     }
 }
