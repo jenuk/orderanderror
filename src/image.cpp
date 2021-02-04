@@ -49,21 +49,23 @@ uint8_t& Image::operator()(int x, int y, int c) {
 
 
 void Image::setPixel(int x, int y, Pixel px) { 
-    // test values
-    (*this)(x, y) = px;
+    if ((0 <= x) and (x < this->width)
+            and (0 <= y) and (y < this->height)){
+        (*this)(x, y) = px;
+    }
 }
 
 
 void Image::drawLineVertical(int x, int y0, int y1, Pixel color) {
     for (int y=y0; y<=y1; ++y) {
-        (*this)(x, y) = color;
+        this->setPixel(x, y, color);
     }
 }
 
 
 void Image::drawLineHorizontal(int x0, int x1, int y, Pixel color) {
     for (int x=x0; x<=x1; ++x) {
-        (*this)(x, y) = color;
+        this->setPixel(x, y, color);
     }
 }
 
@@ -146,17 +148,17 @@ void Image::drawCircle(int x0, int y0, int r, Pixel color) {
     int d = 1 - r;
 
     while (x <= y) {
-        (*this)(x0 + x, y0 + y) = color;
-        (*this)(x0 - x, y0 + y) = color;
+        this->setPixel(x0 + x, y0 + y, color);
+        this->setPixel(x0 - x, y0 + y, color);
         
-        (*this)(x0 + x, y0 - y) = color;
-        (*this)(x0 - x, y0 - y) = color;
+        this->setPixel(x0 + x, y0 - y, color);
+        this->setPixel(x0 - x, y0 - y, color);
 
-        (*this)(x0 + y, y0 + x) = color;
-        (*this)(x0 - y, y0 + x) = color;
+        this->setPixel(x0 + y, y0 + x, color);
+        this->setPixel(x0 - y, y0 + x, color);
         
-        (*this)(x0 + y, y0 - x) = color;
-        (*this)(x0 - y, y0 - x) = color;
+        this->setPixel(x0 + y, y0 - x, color);
+        this->setPixel(x0 - y, y0 - x, color);
 
         if (d < 0) {
             d += 2*x + 3;
@@ -188,6 +190,33 @@ void Image::drawCircleFilled(int x0, int y0, int r, Pixel color) {
             d += 2*x - 2*y + 5;
             ++x;
             --y;
+        }
+    }
+}
+
+
+void Image::fill(int x, int y, Pixel color) {
+    const Pixel empty = (*this)(x, y);
+    std::deque<std::array<int, 2>> queue;
+    queue.push_back({x, y});
+
+    std::array<int, 2> current;
+    while (queue.size() > 0) {
+        current = queue.front();
+        queue.pop_front();
+
+        x = current[0];
+        y = current[1];
+        if ((*this)(x, y) == empty) {
+            (*this)(x, y) = color;
+            if (x > 0)
+                queue.push_back({x - 1, y});
+            if (x + 1 < this->width)
+                queue.push_back({x + 1, y});
+            if (y > 0)
+                queue.push_back({x, y - 1});
+            if (y + 1 < this->height)
+                queue.push_back({x, y + 1});
         }
     }
 }

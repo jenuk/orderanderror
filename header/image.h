@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <array>
+#include <deque>
 
 typedef std::array<uint8_t, 3> Pixel;
 
@@ -23,6 +24,7 @@ class Image {
         void drawLine(int x0, int y0, int x1, int y1, Pixel color);
         void drawCircle(int x0, int y0, int r, Pixel color);
         void drawCircleFilled(int x0, int y0, int r, Pixel color);
+        void fill(int x, int y, Pixel color);
 
 
     private:
