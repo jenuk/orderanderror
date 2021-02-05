@@ -1,8 +1,8 @@
 #include "../header/image.h"
 
-Image::Image(int width, int height) : width(width), height(height) {
+Image::Image(int width, int height) : width_(width), height_(height) {
     Pixel white = {255, 255, 255}; 
-    this->data = std::vector<Pixel>(width*height, white);
+    this->data_ = std::vector<Pixel>(width*height, white);
 }
 
 void Image::write(std::string filename) const {
@@ -14,11 +14,11 @@ void Image::write(std::string filename) const {
 
 void Image::write(std::ostream& out) const {
     out << "P6" << "\n";
-    out << this->width << " " << this->height << "\n";
+    out << this->width_ << " " << this->height_ << "\n";
     out << 255 << "\n";
 
-    for (int y=0; y<this->height; ++y) {
-        for (int x=0; x<this->width; ++x) {
+    for (int y=0; y<this->height_; ++y) {
+        for (int x=0; x<this->width_; ++x) {
             for (int c=0; c<3; ++c){
                 out << (char) (*this)(x, y, c);
             }
@@ -29,11 +29,11 @@ void Image::write(std::ostream& out) const {
 }
 
 const Pixel& Image::operator()(int x, int y) const {
-    return this->data[x + y*this->width];
+    return this->data_[x + y*this->width_];
 }
 
 Pixel& Image::operator()(int x, int y) {
-    return this->data[x + y*this->width];
+    return this->data_[x + y*this->width_];
 }
 
 
@@ -49,8 +49,8 @@ uint8_t& Image::operator()(int x, int y, int c) {
 
 
 void Image::setPixel(int x, int y, Pixel px) { 
-    if ((0 <= x) and (x < this->width)
-            and (0 <= y) and (y < this->height)){
+    if ((0 <= x) and (x < this->width_)
+            and (0 <= y) and (y < this->height_)){
         (*this)(x, y) = px;
     }
 }
@@ -209,13 +209,14 @@ void Image::fill(int x, int y, Pixel color) {
         y = current[1];
         if ((*this)(x, y) == empty) {
             (*this)(x, y) = color;
-            if (x > 0)
+            if ((x > 0) and ((*this)(x - 1, y) == empty)){
                 queue.push_back({x - 1, y});
-            if (x + 1 < this->width)
+            }
+            if ((x + 1 < this->width_) and ((*this)(x + 1, y) == empty))
                 queue.push_back({x + 1, y});
-            if (y > 0)
+            if ((y > 0) and ((*this)(x, y - 1) == empty))
                 queue.push_back({x, y - 1});
-            if (y + 1 < this->height)
+            if ((y + 1 < this->height_) and ((*this)(x, y + 1) == empty))
                 queue.push_back({x, y + 1});
         }
     }

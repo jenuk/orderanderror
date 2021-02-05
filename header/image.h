@@ -1,3 +1,7 @@
+#ifndef IMAGE_H
+#define IMAGE_H
+
+
 #include <iostream>
 #include <fstream>
 #include <cstdint>
@@ -28,12 +32,15 @@ class Image {
 
 
     private:
-        const int width;
-        const int height;
-        std::vector<Pixel> data;
+        const int width_;
+        const int height_;
+        std::vector<Pixel> data_;
 
         void drawLineVertical(int x, int y0, int y1, Pixel color);
         void drawLineHorizontal(int x0, int x1, int y, Pixel color);
         void drawLineLow(int x0, int y0, int x1, int y1, Pixel color);
         void drawLineHigh(int x0, int y0, int x1, int y1, Pixel color);
 };
+
+
+#endif
