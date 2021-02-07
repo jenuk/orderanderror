@@ -18,8 +18,9 @@ class Graph {
         void addNode(int x, int y, int r);
 
         void makeConnections();
+        void visit(unsigned num_steps, unsigned duration_step);
 
-        void draw(Image& img) const;
+        void draw(Image& img) ;
 
     private:
         const int width_;

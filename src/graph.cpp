@@ -55,8 +55,41 @@ void Graph::makeConnections() {
     }
 }
 
-void Graph::draw(Image& img) const {
+void Graph::draw(Image& img) {
     for (auto node : this->nodes_) {
         node.draw(img);
+    }
+    
+    std::uniform_int_distribution<uint8_t> dist_color(0, 255);
+    Pixel color;
+    Pixel empty = {255, 255, 255};
+    for (int y=0; y<this->height_; ++y) {
+        for (int x=0; x<this->width_; ++x) {
+            if (img(x, y) == empty) {
+                color = {dist_color(this->rng_),
+                    dist_color(this->rng_),
+                    dist_color(this->rng_)};
+                img.fill(x, y, color);
+            }
+        }
+    }
+}
+
+
+void Graph::visit(unsigned num_steps, unsigned duration_step) {
+    std::uniform_int_distribution<int> dist(0,0);
+    Node* current = nullptr;
+    int ind;
+
+    for (unsigned k=0; k < num_steps; ++k) {
+        dist = std::uniform_int_distribution<int>(0, this->nodes_.size()-1);
+        current = &(this->nodes_[dist(this->rng_)]);
+
+        for (unsigned l=0; l < duration_step; ++l) {
+            dist = std::uniform_int_distribution<int>(0, current->adjacent_.size()-1);
+            ind = dist(this->rng_);
+            current->visible_[ind] = true;
+            current = current->adjacent_[ind];
+        }
     }
 }

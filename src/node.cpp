@@ -4,7 +4,7 @@ Node::Node(int x, int y, int r) : adjacent_(), visible_(), x_(x), y_(y), r_(r) {
 }
 
 void Node::draw(Image& img) const {
-    img.drawCircle(this->x_, this->y_, this->r_, {0, 0, 0});
+    //img.drawCircle(this->x_, this->y_, this->r_, {0, 0, 0});
 
     Node* node_ptr = nullptr;
     for (std::size_t i = 0; i < this->adjacent_.size(); ++i) {

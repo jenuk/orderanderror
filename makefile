@@ -9,14 +9,17 @@ RES := image
 MAIN := main.cpp
 EXEC := build/main
 
-SRCS := $(shell ls src/*.cpp)
+SRCS := $(shell ls $(SRC_DIR)/*.cpp)
 OBJ := $(SRCS:$(SRC_DIR)/%.cpp=$(BUILD_DIR)/%.o)
 DEPS := $(OBJ:%.o=%.d)
 HEADER_FLAG := -I$(HEADER_DIR)
 
+.PHONY: image clean
 
-imgs/$(RES).png: $(EXEC)
-	$(EXEC) | pnmtopng > imgs/$(RES).png
+image: $(EXEC)
+	$(EXEC) 
+	pnmtopng imgs/image.ppm > imgs/$(RES).png
+	rm imgs/image.ppm
 
 
 $(EXEC): $(MAIN) $(OBJ)
@@ -27,10 +30,9 @@ $(OBJ):$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
 	$(CXX) $(CXXFLAGS) $(HEADER_FLAG) -MMD -c $< -o $@
 
 
-.PHONY: clean
 clean:
-	-rm build/*.o 
-	-rm build/*.d 
+	-rm $(BUILD_DIR)/*.o 
+	-rm $(BUILD_DIR)/*.d 
 	-rm $(EXEC)
 
 
