@@ -1,7 +1,7 @@
 #include <iostream>
 
-#include "header/image.h"
-#include "header/graph.h"
+#include "image.h"
+#include "graph.h"
 
 int main(){
     int width = 500, height = 500;

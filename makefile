@@ -1,27 +1,37 @@
 CXX := g++
 CXXFLAGS := --std=c++17 -Wall -Wextra
 
-RES = image
+SRC_DIR = ./src
+BUILD_DIR = ./build
+HEADER_DIR = ./header
 
-MAIN = main.cpp
-HEADER = image.h node.h graph.h
+RES := image
+MAIN := main.cpp
+EXEC := build/main
 
-OBJ = $(HEADER:%.h=build/%.o)
+SRCS := $(shell ls src/*.cpp)
+OBJ := $(SRCS:src/%.cpp=build/%.o)
+DEPS = $(OBJ:%.o=%.d)
+HEADER_FLAG = -I$(HEADER_DIR)
+
+
+imgs/$(RES).png: $(EXEC)
+	$(EXEC) | pnmtopng > imgs/$(RES).png
+
+
+$(EXEC): $(MAIN) $(OBJ)
+	$(CXX) $(CXXFLAGS) $(HEADER_FLAG) $(OBJ) $(MAIN) -o $(EXEC)
+
+
+$(OBJ):build/%.o: src/%.cpp
+	$(CXX) $(CXXFLAGS) $(HEADER_FLAG) -MMD -c $< -o $@
+
 
 .PHONY: clean
-
-imgs/$(RES).png: main
-	./main | pnmtopng > imgs/$(RES).png
-
-main: $(MAIN) $(OBJ)
-	$(CXX) $(CXXFLAGS) $(OBJ) $(MAIN) -o main
-
-
-# assumes .h for every .cpp
-$(OBJ):build/%.o: src/%.cpp header/%.h
-	$(CXX) $(CXXFLAGS) -c $< -o $@
-
-
 clean:
 	-rm build/*.o 
-	-rm main
+	-rm build/*.d 
+	-rm $(EXEC)
+
+
+-include $(DEPS)

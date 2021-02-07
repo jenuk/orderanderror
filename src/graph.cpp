@@ -1,4 +1,4 @@
-#include "../header/graph.h"
+#include "graph.h"
 
 Graph::Graph(int width, int height) : width_(width), height_(height), nodes_() {
     std::random_device rd;

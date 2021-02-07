@@ -18,11 +18,13 @@ class Node {
 
         void draw(Image& img) const;
 
+        std::vector<Node*> adjacent_;
+        std::vector<bool> visible_;
+
     private:
         int x_;
         int y_;
         int r_;
-        std::vector<Node*> adjacent_;
 };
 
 #endif
