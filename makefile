@@ -4,7 +4,7 @@ CXXFLAGS := --std=c++17 -Wall -Wextra
 RES = image
 
 MAIN = main.cpp
-HEADER = image.h node.h
+HEADER = image.h node.h graph.h
 
 OBJ = $(HEADER:%.h=build/%.o)
 
