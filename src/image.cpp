@@ -221,3 +221,13 @@ void Image::fill(int x, int y, Pixel color) {
         }
     }
 }
+
+
+
+Pixel hsv_to_rgb(float h, float s, float v) {
+    auto f = [&] (int n) -> uint8_t {
+        float k = std::fmod(n + h/60.0f, 6.0f);
+        return 255*(v - v*s*(std::max(0.0f, std::min(std::min(k, 4.0f-k), 1.0f))));
+    };
+    return {f(5), f(3), f(1)};
+}

@@ -2,13 +2,15 @@
 #define IMAGE_H
 
 
-#include <iostream>
-#include <fstream>
-#include <cstdint>
+#include <iostream> // write to stream
+#include <fstream> // write to files
+#include <cstdint> // uint8_t
 #include <string>
 #include <vector>
 #include <array>
-#include <deque>
+#include <deque> // queue for recursion
+#include <algorithm> // max, min
+#include <cmath> //fmod
 
 typedef std::array<uint8_t, 3> Pixel;
 
@@ -41,6 +43,9 @@ class Image {
         void drawLineLow(int x0, int y0, int x1, int y1, Pixel color);
         void drawLineHigh(int x0, int y0, int x1, int y1, Pixel color);
 };
+
+
+Pixel hsv_to_rgb(float h, float s, float v);
 
 
 #endif
