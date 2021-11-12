@@ -18,7 +18,7 @@ int main(int argc, char* argv[]){
     // handle command line arguments
     std::vector<std::string> args(argv, argv+argc);
     for (int i=1; i < argc; i++) {
-        if (args[i] == "--help" || args[i] == "-h") {
+        if (args[i] == "--help") {
             std::cout << args[0] << " "
                 << "[--random_layout] "
                 << "[-w WIDTH] "
